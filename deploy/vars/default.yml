@@ -8,6 +8,6 @@ app_name: demo
 server_name: jokes.paralect.com
 nginx_servers: ["localhost:9000"]
 deploy_dir: "~/{{ app_name }}"
-deploy_app_dir: "~/{{ deploy_dir }}/{{ app_name }}-app"
+deploy_app_dir: "~/{{ app_name }}/{{ app_name }}-app"
 
 
