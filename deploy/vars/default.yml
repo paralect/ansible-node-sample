@@ -1,0 +1,13 @@
+---
+#Configuration for scheduler
+#########################################################
+
+repo_url: git@github.com:paralect/ansible-node-sample.git
+repo_version: master
+app_name: demo
+server_name: jokes.paralect.com
+nginx_servers: ["localhost:9000"]
+deploy_dir: "~/{{ app_name }}"
+deploy_app_dir: "~/{{ deploy_dir }}/{{ app_name }}-app"
+
+

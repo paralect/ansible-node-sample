@@ -1,0 +1,21 @@
+---
+  - name: update apt packages
+    sudo: yes
+    apt: update_cache=yes cache_valid_time=3600
+
+  - name: install nodejs requirements
+    sudo: yes
+    apt: pkg={{ item }} state=present
+    with_items:
+      - python-software-properties
+      - python 
+      - g++ 
+      - make 
+
+  - name: add Chris Lea's nodejs ppa
+    sudo: yes
+    apt_repository: repo='ppa:chris-lea/node.js'
+
+  - name: install nodejs
+    sudo: yes
+    apt: pkg=nodejs update_cache=yes

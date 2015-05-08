@@ -1,0 +1,8 @@
+*.bak
+*.log
+.vagrant/
+node_modules/
+*.zip
+.idea
+.sass-cache
+Thumbs.db

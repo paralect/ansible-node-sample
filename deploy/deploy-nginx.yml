@@ -1,0 +1,24 @@
+---
+- name: Deploy nginx
+  hosts: app-servers
+  vars_files:
+    - ["vars/default.yml"]
+  roles:
+    - nginx
+  tasks:
+    - name: copy nginx virtual host file
+      sudo: yes
+      template: src="{{ inventory_dir }}/templates/nginx.j2"
+                dest="/etc/nginx/sites-available/{{app_name}}"
+                owner=root
+                group=root
+
+    - name: link nginx virtual host file
+      sudo: yes
+      file: src="/etc/nginx/sites-available/{{app_name}}"
+            dest="/etc/nginx/sites-enabled/{{app_name}}"
+            state=link
+
+    - name: restart nginx
+      sudo: yes
+      service: name=nginx state=restarted

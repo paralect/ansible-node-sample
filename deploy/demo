@@ -1,0 +1,4 @@
+demo ansible_ssh_host=104.236.198.187
+
+[app-servers]
+demo

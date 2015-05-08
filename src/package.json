@@ -1,0 +1,17 @@
+{
+  "name": "jokeGenerator",
+  "version": "0.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "request": "^2.46.0",
+    "setty": "^1.0.2"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "private": true
+}

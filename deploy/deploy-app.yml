@@ -1,0 +1,53 @@
+---
+- name: Deploy application
+  hosts: app-servers
+  vars_files:
+    - ["vars/default.yml"]
+  roles:
+    - common
+    - nodejs
+  tasks:
+    - name: Install global npm packages
+      npm: name={{ item }} global=yes
+      sudo: yes
+      with_items:
+        - forever
+
+    - name: Make app dir
+      sudo: no
+      shell: mkdir -p {{ deploy_app_dir }}
+      changed_when: False
+
+    - name: Pull sources from the repository.
+      sudo: no
+      git: repo={{ repo_url }}
+           ssh_opts="-o StrictHostKeyChecking=no"
+           dest={{ deploy_app_dir }}
+           version={{ repo_version }}
+
+    - name: install npm packages for root
+      sudo: no
+      shell: chdir={{ deploy_app_dir }}/src npm install
+
+    - name: create config file
+      sudo: yes
+      lineinfile: dest={{ deploy_app_dir }}/src/settings/.config create=yes state=present line="{{ env }}"
+
+    - name: Forever list
+      shell: forever list
+      register: forever_processes
+
+    - name: Restart forever if it started already
+      shell: >
+        forever stop {{ deploy_app_dir }}/src/server.js
+      when: forever_processes.stdout.find('/src/server.js') != -1
+
+    - name: Start node with forever
+      shell: >
+        forever start
+        --append
+        -e {{ deploy_dir }}/{{ app_name }}-error.log
+        -l {{ deploy_dir }}/{{ app_name }}-forever.log
+        -o {{ deploy_dir }}/{{ app_name }}-node.log
+        {{ deploy_app_dir}}/src/server.js
+      sudo: yes
